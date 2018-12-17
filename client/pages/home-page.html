@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../elements/custom-element.html">
+<link rel="import" href="../elements/salary-input.html">
 
 <dom-module id="home-page">
   <template>
@@ -7,8 +7,14 @@
       :host {
         display: block;
       }
+
+      salary-input {
+        width: 150px;
+      }
     </style>
-    <custom-element></custom-element>
+
+    <h2>Home Page</h2>
+    <salary-input></salary-input>
   </template>
 
   <script>
