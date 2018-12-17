@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
+
+<dom-module id="salary-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <paper-input
+      id="input"
+      label="Salary"
+      allowed-pattern="^[0-9]*$"
+      type="number"
+      min="0"
+      step="1000"
+      value="[[salary]]"
+      on-focused-changed="_observeFocus"
+    >
+      <div slot="prefix">$&nbsp</div>
+    </paper-input>
+  </template>
+
+  <script>
+    class SalaryInput extends Polymer.Element {
+      static get is() { return 'salary-input'; }
+
+      static get properties() {
+        return {
+          salary: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      _observeFocus(e) {
+        const input = this.$.input,
+              focusedOff = !_.get(e, 'detail.value');
+        let value;
+
+        if (input && focusedOff) {
+          value = _.toNumber(input.get('value'));
+
+          if (!_.isNaN(value)) {
+            this.set('salary', value);
+          }
+        }
+      }
+    }
+
+    window.customElements.define(SalaryInput.is, SalaryInput);
+  </script>
+</dom-module>
