@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Home Page Test</title>
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="/bower_components/web-component-tester/browser.js"></script>
+
+    <link rel="import" href="/client/pages/home-page.html">
+  </head>
+  <body>
+
+    <test-fixture id="Fixture">
+      <template>
+        <home-page></home-page>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('home-page', function() {
+        test('instantiating the element with default properties works', function() {
+          const element = fixture('Fixture'),
+                customElement = element.shadowRoot.querySelector('custom-element');
+
+          expect(customElement.shadowRoot.querySelector('h2').innerText).to.equal('Hello World!')
+        });
+      });
+    </script>
+
+
+  </body>
+</html>
