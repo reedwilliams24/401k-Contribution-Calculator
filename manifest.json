@@ -1,0 +1,6 @@
+{
+  "name": "401k-Contribution-Calculator",
+  "short_name": "401k-Contribution-Calculator",
+  "start_url": "/",
+  "display": "standalone"
+}
