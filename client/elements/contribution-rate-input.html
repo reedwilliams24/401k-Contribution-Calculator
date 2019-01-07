@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="./number-input.html">
 
-<dom-module id="salary-input">
+<dom-module id="contribution-rate-input">
   <template>
     <style>
       :host {
@@ -10,20 +9,19 @@
     </style>
 
     <number-input
-      label="Salary"
-      prefix="$&nbsp"
-      step="1000"
-      value="[[salary]]"
+      label="Contribtion Rate"
+      prefix="%&nbsp"
+      value="[[rate]]"
     ></number-input>
   </template>
 
   <script>
-    class SalaryInput extends Polymer.Element {
-      static get is() { return 'salary-input'; }
+    class ContributionRateInput extends Polymer.Element {
+      static get is() { return 'contribution-rate-input'; }
 
       static get properties() {
         return {
-          salary: {
+          rate: {
             type: Number,
             value: 0
           }
@@ -31,6 +29,6 @@
       }
     }
 
-    window.customElements.define(SalaryInput.is, SalaryInput);
+    window.customElements.define(ContributionRateInput.is, ContributionRateInput);
   </script>
 </dom-module>

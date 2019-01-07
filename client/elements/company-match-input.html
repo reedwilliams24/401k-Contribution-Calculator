@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="./number-input.html">
 
-<dom-module id="salary-input">
+<dom-module id="company-match-input">
   <template>
     <style>
       :host {
@@ -10,27 +9,26 @@
     </style>
 
     <number-input
-      label="Salary"
-      prefix="$&nbsp"
-      step="1000"
-      value="[[salary]]"
+      label="Company Match"
+      prefix="%&nbsp"
+      value="[[rate]]"
     ></number-input>
   </template>
 
   <script>
-    class SalaryInput extends Polymer.Element {
-      static get is() { return 'salary-input'; }
+    class CompanyMatchInput extends Polymer.Element {
+      static get is() { return 'company-match-input'; }
 
       static get properties() {
         return {
-          salary: {
+          rate: {
             type: Number,
-            value: 0
+            value: 4
           }
         };
       }
     }
 
-    window.customElements.define(SalaryInput.is, SalaryInput);
+    window.customElements.define(CompanyMatchInput.is, CompanyMatchInput);
   </script>
 </dom-module>

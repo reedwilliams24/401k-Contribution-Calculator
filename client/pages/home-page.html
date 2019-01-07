@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../elements/salary-input.html">
+<link rel="import" href="../elements/contribution-rate-input.html">
+<link rel="import" href="../elements/company-match-input.html">
 
 <dom-module id="home-page">
   <template>
@@ -8,13 +10,14 @@
         display: block;
       }
 
-      salary-input {
+      .input {
         width: 150px;
       }
     </style>
 
-    <h2>Home Page</h2>
-    <salary-input></salary-input>
+    <salary-input class="input"></salary-input>
+    <contribution-rate-input class="input"></contribution-rate-input>
+    <company-match-input class="input"></company-match-input>
   </template>
 
   <script>
