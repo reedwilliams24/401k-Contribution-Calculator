@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
 
 <dom-module id="contribution-rate-input">
   <template>
@@ -12,20 +14,37 @@
       label="Contribtion Rate"
       prefix="%&nbsp"
       value="[[rate]]"
+      on-value-changed="_changeContributionRate"
     ></number-input>
   </template>
 
   <script>
-    class ContributionRateInput extends Polymer.Element {
+    class ContributionRateInput extends Mixins.ReduxMixin(Polymer.Element) {
       static get is() { return 'contribution-rate-input'; }
 
       static get properties() {
         return {
           rate: {
             type: Number,
-            value: 0
+            statePath: 'contributionRate'
           }
         };
+      }
+
+      static get actions() {
+        return {
+          changeContributionRate(contributionRate) {
+            return { type: 'CHANGE_CONTRIBUTION_RATE', contributionRate };
+          }
+        };
+      }
+
+      _changeContributionRate(e) {
+        const value = _.get(e, 'detail.value');
+
+        if (_.isNumber(value)) {
+          this.dispatch('changeContributionRate', value);
+        }
       }
     }
 

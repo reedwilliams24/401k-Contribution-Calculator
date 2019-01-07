@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
 
 <dom-module id="company-match-input">
   <template>
@@ -11,21 +13,38 @@
     <number-input
       label="Company Match"
       prefix="%&nbsp"
-      value="[[rate]]"
+      value="[[companyMatch]]"
+      on-value-changed="_changeCompanyMatch"
     ></number-input>
   </template>
 
   <script>
-    class CompanyMatchInput extends Polymer.Element {
+    class CompanyMatchInput extends Mixins.ReduxMixin(Polymer.Element) {
       static get is() { return 'company-match-input'; }
 
       static get properties() {
         return {
-          rate: {
+          companyMatch: {
             type: Number,
-            value: 4
+            statePath: 'companyMatch'
           }
         };
+      }
+
+      static get actions() {
+        return {
+          changeCompanyMatch(companyMatch) {
+            return { type: 'CHANGE_COMPANY_MATCH', companyMatch };
+          }
+        };
+      }
+
+      _changeCompanyMatch(e) {
+        const value = _.get(e, 'detail.value');
+
+        if (_.isNumber(value)) {
+          this.dispatch('changeCompanyMatch', value);
+        }
       }
     }
 

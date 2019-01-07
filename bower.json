@@ -4,7 +4,9 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-input": "2.2.3",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "polymer-redux": "^1.0.5",
+    "redux-min": "https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.min.js"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

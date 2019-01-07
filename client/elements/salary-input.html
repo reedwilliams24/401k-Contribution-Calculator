@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="./number-input.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
 
 <dom-module id="salary-input">
   <template>
@@ -14,20 +16,37 @@
       prefix="$&nbsp"
       step="1000"
       value="[[salary]]"
+      on-value-changed="_changeSalary"
     ></number-input>
   </template>
 
   <script>
-    class SalaryInput extends Polymer.Element {
+    class SalaryInput extends Mixins.ReduxMixin(Polymer.Element) {
       static get is() { return 'salary-input'; }
 
       static get properties() {
         return {
           salary: {
             type: Number,
-            value: 0
+            statePath: 'salary'
           }
         };
+      }
+
+      static get actions() {
+        return {
+          changeSalary(salary) {
+            return { type: 'CHANGE_SALARY', salary };
+          }
+        };
+      }
+
+      _changeSalary(e) {
+        const value = _.get(e, 'detail.value');
+
+        if (_.isNumber(value)) {
+          this.dispatch('changeSalary', value);
+        }
       }
     }
 
