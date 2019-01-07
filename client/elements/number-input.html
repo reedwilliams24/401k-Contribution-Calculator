@@ -1,0 +1,77 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
+
+<dom-module id="number-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <paper-input
+      id="input"
+      label="[[label]]"
+      allowed-pattern="[[allowedPattern]]"
+      type="number"
+      min="[[min]]"
+      step="[[step]]"
+      value="[[value]]"
+      on-focused-changed="_observeFocus"
+    >
+      <div slot="prefix">[[prefix]]</div>
+    </paper-input>
+  </template>
+
+  <script>
+    class NumberInput extends Polymer.Element {
+      static get is() { return 'number-input'; }
+
+      static get properties() {
+        return {
+          label: {
+            type: String,
+            value: ''
+          },
+          allowedPattern: {
+            type: String,
+            value: '^[0-9]*$'
+          },
+          prefix: {
+            type: String,
+            value: ''
+          },
+          min: {
+            type: String,
+            value: '0'
+          },
+          step: {
+            type: String,
+            value: '1'
+          },
+          value: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      _observeFocus(e) {
+        const input = this.$.input,
+              focusedOff = !_.get(e, 'detail.value');
+        let value;
+
+        if (input && focusedOff) {
+          value = _.toNumber(input.get('value'));
+
+          if (!_.isNaN(value)) {
+            this.set('value', value);
+          }
+        }
+      }
+    }
+
+    window.customElements.define(NumberInput.is, NumberInput);
+  </script>
+</dom-module>
