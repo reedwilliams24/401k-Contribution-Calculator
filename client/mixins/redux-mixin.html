@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<script src="../../bower_components/redux-min/index.js"></script>
+
+<script>
+  const initial = {
+    salary: 0,
+    contributionRate: 0,
+    companyMatch: 4
+  };
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'CHANGE_SALARY':
+        return Object.assign({}, state, {
+          salary: action.salary
+        });
+      case 'CHANGE_CONTRIBUTION_RATE':
+        return Object.assign({}, state, {
+          contributionRate: action.contributionRate
+        });
+      case 'CHANGE_COMPANY_MATCH':
+        return Object.assign({}, state, {
+          companyMatch: action.companyMatch
+        });
+      default:
+        return state;
+    }
+  };
+
+  const store = Redux.createStore(reducer, initial);
+  window.Mixins = window.Mixins || {};
+  Mixins.ReduxMixin = PolymerRedux(store);
+</script>
