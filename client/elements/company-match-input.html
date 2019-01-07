@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="company-match-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <number-input
+      label="Company Match"
+      prefix="%&nbsp"
+      value="[[rate]]"
+    ></number-input>
+  </template>
+
+  <script>
+    class CompanyMatchInput extends Polymer.Element {
+      static get is() { return 'company-match-input'; }
+
+      static get properties() {
+        return {
+          rate: {
+            type: Number,
+            value: 4
+          }
+        };
+      }
+    }
+
+    window.customElements.define(CompanyMatchInput.is, CompanyMatchInput);
+  </script>
+</dom-module>
