@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./number-input.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
+
+<dom-module id="contribution-limit-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <number-input
+      label="Contribution Limit"
+      prefix="$&nbsp"
+      step="1000"
+      value="[[limit]]"
+      on-value-changed="_changeContributionLimit"
+    ></number-input>
+  </template>
+
+  <script>
+    class ContributionLimitInput extends Mixins.ReduxMixin(Polymer.Element) {
+      static get is() { return 'contribution-limit-input'; }
+
+      static get properties() {
+        return {
+          limit: {
+            type: Number,
+            statePath: 'contributionLimit'
+          }
+        };
+      }
+
+      static get actions() {
+        return {
+          changeContributionLimit(salary) {
+            return { type: 'CHANGE_CONTRIBUTION_LIMIT', salary };
+          }
+        };
+      }
+
+      _changeContributionLimit(e) {
+        const value = _.get(e, 'detail.value');
+
+        if (_.isNumber(value)) {
+          this.dispatch('changeContributionLimit', value);
+        }
+      }
+    }
+
+    window.customElements.define(ContributionLimitInput.is, ContributionLimitInput);
+  </script>
+</dom-module>
