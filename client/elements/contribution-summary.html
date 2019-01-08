@@ -8,12 +8,54 @@
       :host {
         display: block;
       }
+
+      #company-match,
+      #contributions,
+      #contribution-sums {
+        margin-top: 15px;
+      }
+
+      #contributions {
+        display: flex;
+        width: 100%;
+        overflow-x: scroll;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        padding: 6px;
+        box-sizing: border-box;
+        white-space: nowrap;
+      }
+      #contributions > section {
+        display: flex;
+        flex-direction: column;
+      }
+      #contributions .contribution {
+        margin-left: 15px;
+      }
     </style>
 
-    <span>[[_displaySalary(salary)]]</span>
-    <span>Company Match Limit: [[_companyMatchLimit(salary, companyMatch)]]</span>
+    <div id="company-match">Company Match Limit: [[_companyMatchLimit(salary, companyMatch)]]</div>
 
-    <pre>[[_stringify(contributions)]]</pre>
+    <section id="contributions">
+      <section>
+        <div>Pay Period</div>
+        <div>Individual</div>
+        <div>Company</div>
+      </section>
+
+      <template is="dom-repeat" items="[[contributions]]" as="contribution">
+        <section class="contribution">
+          <span>[[_plusOne(index)]]</span>
+          <span>[[_formatCurrency(contribution.individual)]]</span>
+          <span>[[_formatCurrency(contribution.company)]]</span>
+        </section>
+      </template>
+    </section>
+
+    <section id="contribution-sums">
+      <div>Individual Contribution: [[_getSum(contributions, 'individual')]]</div>
+      <div>Company Contribution: [[_getSum(contributions, 'company')]]</div>
+    </section>
   </template>
 
   <script>
@@ -45,37 +87,41 @@
         };
       }
 
-      _stringify(arg) {
-        return JSON.stringify(arg, null, 2);
+      _getSum(contributions, iteratee) {
+        return this._formatCurrency(_.sumBy(contributions, iteratee));
       }
 
-      _displaySalary(salary = '') {
-        return `Salary: $${salary.toLocaleString()}`;
+      _formatCurrency(num) {
+        return `$${num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       }
 
       _companyMatchLimit(salary = 0, companyMatch = 0) {
         const result = salary * (companyMatch / 100);
-        return result.toLocaleString();
+        return this._formatCurrency(result);
       }
 
       _computeContributions(salary = 0, rate = 0, limit = 0, companyMatch = 0) {
         const payPeriods = 24,
               result = [];
         let totalIndContribution = 0,
-            contribution;
+            indContribution;
 
         for (let i = 0; i < payPeriods; i++) {
-          contribution = {
-            individual: Math.min(limit - totalIndContribution, salary * (rate/100) * (1/payPeriods))
-          };
+          indContribution = Math.min(limit - totalIndContribution, salary * (rate/100) * (1/payPeriods));
 
-          contribution.company = Math.min(salary * (companyMatch/100) * (1/payPeriods), contribution.individual);
-          totalIndContribution += contribution.individual;
+          result.push({
+            individual: indContribution,
+            company: Math.min(salary * (companyMatch/100) * (1/payPeriods), indContribution)
+          });
 
-          result.push(contribution);
+          totalIndContribution += indContribution;
         }
 
         return result;
+      }
+
+      _plusOne(num = 0) {
+        return num + 1;
       }
     }
 
