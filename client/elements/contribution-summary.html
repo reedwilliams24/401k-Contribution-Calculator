@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
+
+<dom-module id="contribution-summary">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <span>[[_displaySalary(salary)]]</span>
+    <span>Company Match Limit: [[_companyMatchLimit(salary, companyMatch)]]</span>
+
+    <pre>[[_stringify(contributions)]]</pre>
+  </template>
+
+  <script>
+    class ContributionSummary extends Mixins.ReduxMixin(Polymer.Element) {
+      static get is() { return 'contribution-summary'; }
+
+      static get properties() {
+        return {
+          salary: {
+            type: Number,
+            statePath: 'salary'
+          },
+          contributionRate: {
+            type: Number,
+            statePath: 'contributionRate'
+          },
+          contributionLimit: {
+            type: Number,
+            statePath: 'contributionLimit'
+          },
+          companyMatch: {
+            type: Number,
+            statePath: 'companyMatch'
+          },
+          contributions: {
+            type: Array,
+            computed: '_computeContributions(salary, contributionRate, contributionLimit, companyMatch)'
+          }
+        };
+      }
+
+      _stringify(arg) {
+        return JSON.stringify(arg, null, 2);
+      }
+
+      _displaySalary(salary = '') {
+        return `Salary: $${salary.toLocaleString()}`;
+      }
+
+      _companyMatchLimit(salary = 0, companyMatch = 0) {
+        const result = salary * (companyMatch / 100);
+        return result.toLocaleString();
+      }
+
+      _computeContributions(salary = 0, rate = 0, limit = 0, companyMatch = 0) {
+        const payPeriods = 24,
+              result = [];
+        let totalIndContribution = 0,
+            contribution;
+
+        for (let i = 0; i < payPeriods; i++) {
+          contribution = {
+            individual: Math.min(limit - totalIndContribution, salary * (rate/100) * (1/payPeriods))
+          };
+
+          contribution.company = Math.min(salary * (companyMatch/100) * (1/payPeriods), contribution.individual);
+          totalIndContribution += contribution.individual;
+
+          result.push(contribution);
+        }
+
+        return result;
+      }
+    }
+
+    window.customElements.define(ContributionSummary.is, ContributionSummary);
+  </script>
+</dom-module>
