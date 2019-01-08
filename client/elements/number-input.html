@@ -20,7 +20,13 @@
       value="[[value]]"
       on-focused-changed="_observeFocus"
     >
-      <div slot="prefix">[[prefix]]</div>
+      <template is="dom-if" if="[[prefix]]">
+        <div slot="prefix">[[prefix]]</div>
+      </template>
+
+      <template is="dom-if" if="[[suffix]]">
+        <div slot="suffix">[[suffix]]</div>
+      </template>
     </paper-input>
   </template>
 
@@ -39,6 +45,10 @@
             value: '^[0-9]*$'
           },
           prefix: {
+            type: String,
+            value: ''
+          },
+          suffix: {
             type: String,
             value: ''
           },

@@ -2,6 +2,8 @@
 <link rel="import" href="../elements/salary-input.html">
 <link rel="import" href="../elements/contribution-rate-input.html">
 <link rel="import" href="../elements/company-match-input.html">
+<link rel="import" href="../elements/contribution-limit-input.html">
+<link rel="import" href="../elements/contribution-summary.html">
 
 <dom-module id="home-page">
   <template>
@@ -16,8 +18,10 @@
     </style>
 
     <salary-input class="input"></salary-input>
-    <contribution-rate-input class="input"></contribution-rate-input>
+    <contribution-limit-input class="input"></contribution-limit-input>
     <company-match-input class="input"></company-match-input>
+    <contribution-rate-input class="input"></contribution-rate-input>
+    <contribution-summary></contribution-summary>
   </template>
 
   <script>

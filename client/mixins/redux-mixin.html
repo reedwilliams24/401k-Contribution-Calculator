@@ -5,7 +5,8 @@
   const initial = {
     salary: 0,
     contributionRate: 0,
-    companyMatch: 4
+    companyMatch: 4,
+    contributionLimit: 19000
   };
 
   const reducer = (state, action) => {
@@ -21,6 +22,10 @@
       case 'CHANGE_COMPANY_MATCH':
         return Object.assign({}, state, {
           companyMatch: action.companyMatch
+        });
+      case 'CHANGE_CONTRIBUTION_LIMIT':
+        return Object.assign({}, state, {
+          contributionLimit: action.contributionLimit
         });
       default:
         return state;

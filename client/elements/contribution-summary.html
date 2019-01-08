@@ -1,0 +1,130 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../mixins/redux-mixin.html">
+<script src="../../bower_components/lodash/lodash.js"></script>
+
+<dom-module id="contribution-summary">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #company-match,
+      #contributions,
+      #contribution-sums {
+        margin-top: 15px;
+      }
+
+      #contributions {
+        display: flex;
+        width: 100%;
+        overflow-x: scroll;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        padding: 6px;
+        box-sizing: border-box;
+        white-space: nowrap;
+      }
+      #contributions > section {
+        display: flex;
+        flex-direction: column;
+      }
+      #contributions .contribution {
+        margin-left: 15px;
+      }
+    </style>
+
+    <div id="company-match">Company Match Limit: [[_companyMatchLimit(salary, companyMatch)]]</div>
+
+    <section id="contributions">
+      <section>
+        <div>Pay Period</div>
+        <div>Individual</div>
+        <div>Company</div>
+      </section>
+
+      <template is="dom-repeat" items="[[contributions]]" as="contribution">
+        <section class="contribution">
+          <span>[[_plusOne(index)]]</span>
+          <span>[[_formatCurrency(contribution.individual)]]</span>
+          <span>[[_formatCurrency(contribution.company)]]</span>
+        </section>
+      </template>
+    </section>
+
+    <section id="contribution-sums">
+      <div>Individual Contribution: [[_getSum(contributions, 'individual')]]</div>
+      <div>Company Contribution: [[_getSum(contributions, 'company')]]</div>
+    </section>
+  </template>
+
+  <script>
+    class ContributionSummary extends Mixins.ReduxMixin(Polymer.Element) {
+      static get is() { return 'contribution-summary'; }
+
+      static get properties() {
+        return {
+          salary: {
+            type: Number,
+            statePath: 'salary'
+          },
+          contributionRate: {
+            type: Number,
+            statePath: 'contributionRate'
+          },
+          contributionLimit: {
+            type: Number,
+            statePath: 'contributionLimit'
+          },
+          companyMatch: {
+            type: Number,
+            statePath: 'companyMatch'
+          },
+          contributions: {
+            type: Array,
+            computed: '_computeContributions(salary, contributionRate, contributionLimit, companyMatch)'
+          }
+        };
+      }
+
+      _getSum(contributions, iteratee) {
+        return this._formatCurrency(_.sumBy(contributions, iteratee));
+      }
+
+      _formatCurrency(num) {
+        return `$${num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      _companyMatchLimit(salary = 0, companyMatch = 0) {
+        const result = salary * (companyMatch / 100);
+        return this._formatCurrency(result);
+      }
+
+      _computeContributions(salary = 0, rate = 0, limit = 0, companyMatch = 0) {
+        const payPeriods = 24,
+              result = [];
+        let totalIndContribution = 0,
+            indContribution;
+
+        for (let i = 0; i < payPeriods; i++) {
+          indContribution = Math.min(limit - totalIndContribution, salary * (rate/100) * (1/payPeriods));
+
+          result.push({
+            individual: indContribution,
+            company: Math.min(salary * (companyMatch/100) * (1/payPeriods), indContribution)
+          });
+
+          totalIndContribution += indContribution;
+        }
+
+        return result;
+      }
+
+      _plusOne(num = 0) {
+        return num + 1;
+      }
+    }
+
+    window.customElements.define(ContributionSummary.is, ContributionSummary);
+  </script>
+</dom-module>
